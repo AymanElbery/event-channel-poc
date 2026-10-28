@@ -1,0 +1,125 @@
+:host {
+  display: block;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+input:not([type='checkbox']),
+select,
+textarea {
+  font: inherit;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #c8ccd4;
+  border-radius: 6px;
+  background: #fff;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background: #f1f2f5;
+  color: #6b7280;
+}
+
+.invalid input,
+.invalid select,
+.invalid textarea {
+  border-color: #c62828;
+}
+
+.req,
+.error-text {
+  color: #c62828;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  background: #1d4ed8;
+  color: #fff;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.warning {
+  padding: 0.75rem 1rem;
+  border: 1px solid #f59e0b;
+  border-radius: 6px;
+  background: #fffbeb;
+}
+
+.warning ul {
+  margin: 0.5rem 0;
+}
+
+.success {
+  color: #15803d;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #9ca3af;
+}
+
+.channel[data-status='open'] .dot {
+  background: #16a34a;
+}
+
+.channel[data-status='connecting'] .dot {
+  background: #f59e0b;
+}
+
+.changes {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}

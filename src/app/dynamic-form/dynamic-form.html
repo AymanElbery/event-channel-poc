@@ -1,0 +1,94 @@
+<div class="channel" [attr.data-status]="channel.status()">
+  <span class="dot"></span>
+  Channel B: {{ channel.status() }}
+  @if (channel.lastAck(); as ack) {
+    <span class="muted">· last ack {{ ack.receivedAt }}</span>
+  }
+</div>
+
+@if (loading()) {
+  <p class="muted">Loading form…</p>
+} @else if (form(); as form) {
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    @for (field of fields(); track field.name) {
+      @if (field.display) {
+        <div class="field" [class.invalid]="isInvalid(field.name)">
+          @switch (field.type) {
+            @case ('checkbox') {
+              <label class="checkbox">
+                <input type="checkbox" [id]="'field-' + field.name" [formControlName]="field.name" />
+                {{ field.label }}
+                @if (field.required) {<span class="req">*</span>}
+              </label>
+            }
+            @case ('textarea') {
+              <label [for]="'field-' + field.name">
+                {{ field.label }} @if (field.required) {<span class="req">*</span>}
+              </label>
+              <textarea [id]="'field-' + field.name" rows="3" [formControlName]="field.name"></textarea>
+            }
+            @case ('select') {
+              <label [for]="'field-' + field.name">
+                {{ field.label }} @if (field.required) {<span class="req">*</span>}
+              </label>
+              <select [id]="'field-' + field.name" [formControlName]="field.name">
+                @for (option of field.options ?? []; track option.value) {
+                  <option [ngValue]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            }
+            @default {
+              <label [for]="'field-' + field.name">
+                {{ field.label }} @if (field.required) {<span class="req">*</span>}
+              </label>
+              <input [id]="'field-' + field.name" [type]="field.type" [formControlName]="field.name" />
+            }
+          }
+          @if (isInvalid(field.name)) {
+            <small class="error-text">
+              {{ form.controls[field.name].hasError('email') ? 'Enter a valid email.' : field.label + ' is required.' }}
+            </small>
+          }
+        </div>
+      }
+    }
+
+    @if (drift().length) {
+      <div class="warning" role="alert">
+        <strong>Some read-only values changed on the server since this form was loaded:</strong>
+        <ul>
+          @for (d of drift(); track d.name) {
+            <li>{{ d.label }}: <s>{{ d.formValue }}</s> → {{ d.latestValue }}</li>
+          }
+        </ul>
+        <div class="actions">
+          <button type="button" (click)="load()">Reload latest values</button>
+          <button type="button" class="secondary" (click)="submitAnyway()">Submit anyway</button>
+        </div>
+      </div>
+    }
+
+    <div class="actions">
+      <button type="submit" [disabled]="submitting()">{{ submitting() ? 'Submitting…' : 'Submit' }}</button>
+    </div>
+  </form>
+
+  @if (submittedAt(); as at) {
+    <p class="success">Submitted at {{ at }}.</p>
+  }
+
+  <details class="changes">
+    <summary>Changed from defaults ({{ channel.changes().length }})</summary>
+    <ul>
+      @for (c of channel.changes(); track c.name) {
+        <li><code>{{ c.name }}</code>: {{ c.defaultValue }} → {{ c.currentValue }}</li>
+      } @empty {
+        <li class="muted">No changes yet.</li>
+      }
+    </ul>
+  </details>
+}
+
+@if (error(); as message) {
+  <p class="error-text" role="alert">{{ message }}</p>
+}
